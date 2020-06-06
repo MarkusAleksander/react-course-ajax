@@ -8,16 +8,19 @@ class FullPost extends Component {
         loadedPost: null,
     };
 
-    componentDidUpdate() {
-        if (this.props.id) {
+    componentDidMount() {
+        console.log(this.props);
+        if (this.props.match.params.id) {
             if (
                 !this.state.loadedPost ||
                 (this.state.loadedPost &&
                     this.state.loadedPost.id !== this.props.id)
             ) {
-                axios.get("/posts/" + this.props.id).then((response) => {
-                    this.setState({ loadedPost: response.data });
-                });
+                axios
+                    .get("/posts/" + this.props.match.params.id)
+                    .then((response) => {
+                        this.setState({ loadedPost: response.data });
+                    });
             }
         }
     }
@@ -34,9 +37,10 @@ class FullPost extends Component {
             post = <p style={{ textAlign: "center" }}>Loading...</p>;
         }
         if (
-            this.props.id &&
+            this.props.match.params.id &&
             this.state.loadedPost &&
-            this.props.id === this.state.loadedPost.id
+            Number(this.props.match.params.id) ===
+                Number(this.state.loadedPost.id)
         ) {
             post = (
                 <div className="FullPost">
